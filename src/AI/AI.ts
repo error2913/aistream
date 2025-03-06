@@ -72,13 +72,14 @@ export class AI {
             if (reply.trim() !== '') {
                 allReply += reply.trim();
                 seal.replyToSender(ctx, msg, reply.trim());
-            } else {
-                await new Promise(resolve => setTimeout(resolve, 100));
             }
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
         }
 
         await end_completion(this.streamId);
 
+        allReply = allReply.replace(/^<think>[\s\S]*?<\/think>/, '');
         await this.context.iteration(ctx, allReply, 'assistant');
 
         this.streamId = '';
